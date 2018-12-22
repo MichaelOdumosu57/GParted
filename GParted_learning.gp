@@ -808,8 +808,144 @@ The gparted application is available on many Live CD distributions.
 			Fixing Operating System Boot Problems	
 [O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O]
 
+Your computer might fail to boot an operating system when you perform one of the following actions:
+
+		Delete a partition.
+		Move a partition.
+		Install another operating system and overwrite the Master Boot Record (MBR).
+			
+		Fortunately the failure to boot can be often be fixed.
+
+		If your computer uses the GRUB boot loader, see the section called “Fixing GRUB boot problem” to restore the ability to boot.
+		If your computer does not use GRUB then you are advised to consult documentation for your boot loader to learn how to fix the problem.
+		You might consult the GParted FAQ, 
+		or the GParted forum. You might also search the Internet to learn how other people have solved similar problems.		
+
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Fixing GRUB boot problem						
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+
+		The Grand Unified Boot loader (GRUB) is used by many GNU/Linux distributions.
+		To fix GRUB boot problems you start by determining which major version of GRUB was used.
+		There are two major versions of GRUB:
+		GRUB, also known as GRUB 2, covers versions 1.98 and higher. GRUB 2 works with both GUID partition tables (GPT) and msdos partition tables.
+		GRUB Legacy, traditionally known as GRUB, covers versions 0.9x and earlier. GRUB Legacy works with msdos partition tables only.
+		GRUB 2 is used as the default boot loader in ...
+		CentOS 7 and higher
+		Debian 6 (Squeeze) and higher
+		Fedora 16 (Verne) and higher
+		openSUSE 12.2 and higher
+		Ubuntu 9.10 (Karmic Koala) and higher
+		If you are unsure whether your computer uses GRUB 2 or GRUB Legacy search the Internet 
+		
+
 
 	
 
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Restoring GRUB 2 Boot Loader							
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
 
 
+Use the following steps to restore the GRUB 2 boot loader:
+
+		Boot from Live media such as GParted Live or your GNU/Linux distribution image. Open a terminal window.
+		Determine which partition contains the / file system for your GNU/Linux distribution.
+		Use GParted to list the partitions on your disk device. Look for a partition that contains your GNU/Linux / file system. 
+		This Linux partition will likely use a file system such as ext2, ext3, ext4, or btrfs.
+
+				If the / partition is on LVM then the Logical Volume Manager must be active. LVM can be started with the command:
+				# vgchange -a y
+				With LVM, the equivalent of a disk partition is a Logical Volume. Logical Volumes can be listed with the command:
+				# lvscan
+
+				If the / partition is on RAID, then the RAID must be active. Linux Software RAID can be started with the command:
+				# mdadm --assemble --scan
+
+		Create a mount point directory by entering (as root):
+				# mkdir /tmp/mydir
+		Mount the / partition on the mount point directory. For example assume the / file system is contained in the /dev/sda5 partition. Enter (as root):
+				# mount /dev/sda5 /tmp/mydir
+		If you have a separate /boot partition, for example at /dev/sda3, then an extra step is required. Mount the /boot partition at /tmp/mydir/boot by entering (as root):
+				# mount /dev/sda3 /tmp/mydir/boot
+
+
+				If you do not know whether you have a separate boot partition then you probably do not and can ignore this step.
+
+
+		Prepare to change the root environment by entering (as root):
+				# mount --bind /dev /tmp/mydir/dev
+				# mount --bind /proc /tmp/mydir/proc
+				# mount --bind /sys /tmp/mydir/sys
+		Change the root environment by entering (as root):
+				# chroot /tmp/mydir
+		Reinstall GRUB 2 on the boot device. Note that the device name is used and not the partition name. 
+		For example, if the / partition is /dev/sda5 then the device is /dev/sda.
+				For Debian, Ubuntu, and other offshoot GNU/Linux distributions, enter the command (as root):
+
+				# grub-install /dev/sda
+				For CentOS, Fedora, openSUSE and other offshoot GNU/Linux distributions, enter the command (as root):
+
+				# grub2-install /dev/sda
+		Exit the chroot environment by entering (as root):
+				# exit
+		Reboot your computer.				
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Restoring GRUB Legacy Boot Loader							
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+
+Use the following steps to restore the GRUB Legacy boot loader:
+		Boot from Live media such as your GNU/Linux distribution image. Open a terminal window.
+
+				The Live media must contain the GRUB Legacy boot loader. 
+				If your GNU/Linux distribution uses GRUB Legacy, 
+				then the distribution Live media will also contain GRUB Legacy.
+
+		Start the grub application from the command line (as root).
+				# grub
+
+		Find where grub stage1 is located by using one of the following:
+
+				If the /boot folder is stored in the / partition, use the command:
+						grub> find /boot/grub/stage1
+
+				If the /boot folder is stored in a partition different than the / partition, use the command:
+						grub> find /grub/stage1
+
+				The output from the find command might look like the following:
+						(hd0,0)
+
+
+				If more than one line is listed in the command output, you will need to decide which device you use for grub.
+
+		Set the grub root device by specifying the device returned by the find command.
+		This should be the partition containing the boot directory.
+				grub> root (hd0,0)
+
+		Reinstall the grub boot loader into the Master Boot Record (MBR) with:
+
+				grub> setup (hd0)
+
+				If you want to install the grub boat loader into the boot sector of a partition, 
+				instead specify a partition with:
+
+						grub> setup (hd0,0)				
+
+		Exit grub.
+				grub> quit
+
+		Reboot your computer.			
+
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Recovering Partition Tables							
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+
+
+If you accidentally overwrite your partition table, there is a chance that you might be able to recover it.
+		The testdisk application is designed to help recover lost partitions. 
+		For more information about testdisk, see https://www.cgsecurity.org/wiki/TestDisk.
+		The testdisk application is included on each Live CD listed in the section called “Acquiring GParted on Live CD”
+						
