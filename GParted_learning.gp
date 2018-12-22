@@ -402,3 +402,414 @@ To change the Universally Unique Identifier (UUID) of a partition:
 
 		If boot or mount problems occur you might need to edit configuration files, 
 		such as /etc/fstab, and regenerate the grub menu to ensure that the correct UUID is specified.
+
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Specifying Partition Details			
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+
+ useful when performing actions such as create, resize, and move.		
+
+[O][O][O][O][O][O]
+			Specifying Partition Details			
+[O][O][O][O][O][O]
+
+To specify the size and the location of the partition, use one or a combination of the following:
+
+		Click-and-hold the arrow at either end of the graphic area. Drag the arrow left or right within the display range.
+		Click-and-hold the middle of the partition in the graphic area. Drag the partition left or right within the display range.
+		Click the spin button arrows, or type numeric values to adjust the following fields:
+
+				Free Space Preceding
+				New Size
+				Free Space Following
+
+The application refreshes both the graphic area and the numbers beside the three field labels.
+
+[O][O][O][O][O][O]
+			Specifying Partition Alignment			
+[O][O][O][O][O][O]
+
+To specify the alignment of the partition, click the Align to arrow button, and select from the list.
+
+		Use MiB alignment for modern operating systems. 
+		This setting aligns partitions to start and end on precise mebibyte (1,048,576 byte) boundaries. 
+		MiB alignment provides enhanced performance when used with RAID systems and with Solid State Drives, such as USB flash drives.
+
+		Use Cylinder alignment to maintain compatibility with operating systems released before the year 2000,
+		such as DOS. This setting aligns partitions to start and end on disk cylinder boundaries.
+
+				Cylinder/Head/Sector values reported by modern disk devices no longer have a direct physical relationship to the
+				data stored on the disk device. Hence it is no longer valid to use this alignment setting to achieve enhanced performance.
+
+
+		Use None only if you have an in-depth knowledge of disk structure, 
+		partition tables, and boot records. This setting places partition boundaries relative
+		to the end of any immediately preceding partition on the disk device. This setting is not
+		guaranteed to reserve or respect space required for boot records.
+
+[O][O][O][O][O][O]
+			Specifying Partition Type		
+[O][O][O][O][O][O]
+
+To specify the partition type, click the Create
+as arrow button, and select from the list.
+
+		Note
+		The msdos partition table limits partitions as follows:
+		Maximum of 4 primary partitions.
+		Maximum of 3 primary partitions, and 1 extended partition.
+		The extended partition can contain multiple logical partitions. Some GNU/Linux distributions support 
+		accessing at most 15 partitions on a disk device.
+		Maximum size of a partition is 2 Tebibytes using a sector size of 512 bytes. 
+		The partition must also start within the first 2 Tebibytes of the disk device.
+		Primary partitions provide better data recoverability because the partition 
+		boundaries are stored at known locations on the disk device.
+
+
+[O][O][O][O][O][O]
+			Specifying Partition Name		
+[O][O][O][O][O][O]		
+
+		Note
+		Naming of partitions is only available with GUID partition tables (GPT). 
+		Therefore the field is only enabled on disk devices partitioned using GPT.
+		Also see the section called “Creating a New Partition Table”.
+
+		To specify the partition name, type the name in the Partition name text box.
+
+[O][O][O][O][O][O]
+			Specifying Partition File System		
+[O][O][O][O][O][O]				
+
+		click the File System arrow button, and select from the list.
+
+				Examples of uses for some file systems are as follows:
+
+				ext2, ext3  ext4 file systems can be used for installing GNU/Linux, and for data.
+				linux-swap can be used with GNU/Linux to increase the virtual memory of your computer.
+				fat16 and fat32 file systems can be used to share data between free and commercial operating systems.
+				cleared can be used to clear any existing file system signatures and ensure that the partition is recognised as empty.
+				unformatted can be used to just create a partition without writing a file system.		
+
+
+[O][O][O][O][O][O]
+			Specifying Partition File System Label	
+[O][O][O][O][O][O]					
+
+		To specify the file system label in the partition,
+		also known as a volume label, type a label name in the Label text box.
+
+				Tip
+				File system labels can be used to help you remember what is stored in the partition.
+				Unique labels can be used to mount file systems with the GNU/Linux operating system.		
+
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Advanced Partition Actions				
+[O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O]	
+
+		These actions will alter partitions on your disk device. 
+		These actions might modify the start or end boundaries of your existing partitions
+		These actions might cause operating systems to fail to boot.		
+
+			
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Resizing a Partition			
+[O][O][O][O][O][O][O][O][O][O][O][O][O]	
+
+		Select a partition. See the section called “Selecting a Partition”.
+				Unmounted or inactive partitions enable the most resize options.
+				Support is available for online resize of some mounted or otherwise active partitions. 
+				However this support is often limited to grow only.
+
+		Choose: Partition → Resize/Move. The application displays the Resize/Move /path-to-partition dialog.
+		Adjust the size of the partition. See the section called “Specifying Partition Size and Location”.
+				If you do not want the start of an existing partition to move, then do not change the free space preceding value. 
+				If the partition is mounted or otherwise active, then you will not be able to change the free space preceding value.
+
+		Specify the alignment of the partition. See the section called “Specifying Partition Alignment”.
+		Click Resize/Move. The application displays the resize/move partition operation in the Pending Operations pane.
+		Examine the operation that was added to the Pending Operations pane.
+
+				If the operation involves a move step, then consider the following:
+				A move step might take a long time to complete.
+				If the partition is an operating system boot partition, then a move step might cause the operating system to fail to boot.
+				If you are not prepared to wait or to fix potential operating system boot problems, then you might want to undo the operation. 
+				See the section called “Undoing Last Operation”.		
+
+				To grow or move a partition, unallocated space must be available adjacent to the partition.
+				If you are growing a logical partition, then the unallocated space must be within the extended partition.
+				If you are growing a primary partition, then the unallocated space must not be within the extended partition.
+				You can move unallocated space to be inside or outside of the extended partition by resizing the extended partition boundaries.				
+
+				A LUKS encrypted partition and the file system within can only be resized when the encryption mapping is open.
+
+				To improve the ability to shrink NTFS partitions, you might consider one or more of the following:
+
+						Defragment the file system.
+						Booting into Safe Mode with the commercial operating system that uses NTFS 
+						can improve the ability to defragment the file system. 
+
+						To enter Safe Mode press F8 while your computer is booting the operating system.
+						Check the partition for errors with the following command:
+						C:> chkdsk /f /r
+						Remember to reboot back into the commercial operating system that uses NTFS to allow the chkdsk command to execute.
+						Temporarily disable the paging file. The paging file occupies a fixed location in the partition 
+						that the defragmentation process is unable to move.
+						Temporarily move large files to another partition or disk device. Large files are defined as greater than a 
+						few hundred Megabytes (MB).
+						Ensure a proper shut down of the commercial operating system that uses NTFS before you resize the NTFS partition
+						Leave at least 10 percent unused space in the NTFS partition. If you shrink the partition too much, 
+						then the commercial operating system might have difficulty functioning properly.
+						Reboot twice into the commercial operating system that uses NTFS after shrinking the NTFS partition.				
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Moving a Partition			
+[O][O][O][O][O][O][O][O][O][O][O][O][O]	
+
+To move a partition:
+
+		Select an unmounted partition. See the section called “Selecting a Partition”.
+		Choose: Partition → Resize/Move. The application displays the Resize/Move /path-to-partition dialog.
+		Adjust the location of the partition. See the section called “Specifying Partition Size and Location”.
+		Specify the alignment of the partition. See the section called “Specifying Partition Alignment”.
+		Click Resize/Move. The application displays the resize/move partition operation in the Pending Operations pane.
+
+				If the partition is an operating system boot partition, then the operating system might not boot after the move operation is applied.
+				If the operating system fails to boot, see the section called “Fixing Operating System Boot Problems”.		
+				A LUKS encrypted partition can only be moved when the encryption mapping is closed.
+
+
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Copying and Pasting a Partition			
+[O][O][O][O][O][O][O][O][O][O][O][O][O]										
+
+To copy a partition:
+
+		Select an unmounted partition. See the section called “Selecting a Partition”.
+		Choose: Partition → Copy. The application marks the partition as the source partition.
+
+To Paste a partition:
+
+		Select an unallocated space on a disk device. See the section called “Selecting Unallocated Space”.
+		Choose: Partition → Paste. The application displays the Paste /path-to-partition dialog.
+		If you want you can adjust the size and location of the partition. See the section called “Specifying Partition Size and Location”.
+		If you want you can specify the alignment of partition. See the section called “Specifying Partition Alignment”.
+		Click Paste. The application displays the copy partition operation in the Pending Operations pane.
+
+		The copy of the partition has the same file system label and Universally Unique Identifier (UUID) as the source partition. 
+		This can cause a problem when booting, or when mount actions use the file system label or UUID to identify the partition.
+		if this is not fixed the OS randomly selects who gets mounted, this causes files to seem to randomly appear and disappear
+		could cause severe data corruption or loss 
+
+		To avoid the problem 
+
+		After you have queued or applied the copy operation:
+
+				Change the UUID of either the source, or the copy of the partition. See the section called “Changing a Partition UUID”.
+
+				If the file system label is not blank then change the file system label of either the source, 
+				or the copy of the partition. See the section called “Setting a Partition File System Label”.
+
+		After you have applied the copy operation, delete or reformat the source partition.
+		Use some other method to ensure that the source partition and the copy of the partition are not used on the same computer at the same time.
+		For example, if the copy of the partition is on a separate drive then remove the drive from the computer.	
+
+
+		The file system within a LUKS encrypted partition can only be copied when the encryption mapping is open.	
+
+		To prevent unintended decryption of data, pasting into unallocated space creating a new partition is not permitted.
+		However a LUKS encrypted partition can be pasted into an existing open LUKS encrypted partition maintaining an encrypted, 
+		or pasted into a plain partition making an unencrypted copy of the file system.		
+
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Managing Partition Flags		
+[O][O][O][O][O][O][O][O][O][O][O][O][O]										
+
+To manage partition flags:
+
+		Select a partition. See the section called “Selecting a Partition”.
+		Choose: Partition → Manage Flags. The application opens a Manage flags on /path-to-partition dialog.
+
+				To enable a flag, select the check box beside the flag. 
+				The application writes the enabled flag to the partition and refreshes the Manage flags on /path-to-partition dialog.
+				To disable a flag, deselect the check box beside the flag. 
+				The application writes the disabled flag to the partition and refreshes the Manage flags on /path-to-partition dialog.
+
+						Manage Flags is only available for disks with partition tables.
+						Disks with loop or none partition tables do not contain a partition table, and do not have partition flags.
+						See the section called “Viewing Device Information” to view the type of partition table
+
+		To close the Manage flags on /path-to-partition dialog, click Close.
+
+		msdos partition table  flags :
+
+				Boot is used by some commercial operating system boot loaders. 
+				The boot flag indicates the partition is active or bootable. Only one partition on a disk device can be active.
+
+				Diag is used to indicate the partition is used for diagnostics / recovery.
+
+				ESP indicates an EFI System Partition used to boot computers with the Unified Extensible Firmware Interface 
+				(UEFI) class 2 that includes compatibility support for BIOS functions including the MBR partition structure.
+
+				Hidden is used by some commercial operating systems. The hidden flag makes the partition invisible to the operating system.
+
+				Irst identifies an Intel Rapid Start Technology partition.
+
+				LBA is used by some commercial operating system boot loaders.
+				 The LBA flag indicates the partition should be accessed using Logical Block Addressing (LBA), 
+				 instead of Cylinder-Head-Sector (CHS) addressing.
+
+				LVM is used to indicate the partition is used by a Logical Volume Manager (LVM).
+
+				Palo is used by the Precision Architecture - Reduced Instruction Set Computing (PA-RISC) boot loader, palo.
+
+				Prep is used to indicate the boot partition on Power Performance Computing (PowerPC) hardware.
+
+				RAID is used to indicate the partition is used in a Redundant Array of Inexpensive Disks (RAID).
+
+		gpt partition table flags:
+
+				Atvrecv is used to indicate an Apple TV Recovery partition.
+
+				BIOS_GRUB indicates a BIOS boot partition often used by the GRUB 2 boot loader.
+
+				Boot is used by some commercial operating system boot loaders. 
+				The boot flag indicates the partition is active or bootable. Only one partition on a disk device can be active.
+
+				Diag indicates the partition is used for diagnostics or recovery.
+
+				ESP indicates an EFI System Partition used to boot computers with Extensible Firmware Interface (EFI) class 1
+				or Unified Extensible Firmware Interface (UEFI) class 2 or UEFI class 3.
+
+				Hidden is used by some commercial operating systems. The hidden flag makes the partition invisible to the operating system.
+
+				HP-service is used to indicate a Hewlett Packard service partition.
+
+				Irst identifies an Intel Rapid Start Technology partition.
+
+				Legacy_boot is used by some special purpose software to indicate the partition might be bootable.
+
+				LVM indicates the partition is used by a Logical Volume Manager (LVM).
+
+				Msftdata identifies partitions that contain Microsoft file systems such as NTFS or FAT.
+
+				Msftres is used to indicate a Microsoft Reserved partition.
+
+				Prep is used to indicate the boot partition on Power Performance Computing (PowerPC) hardware.
+
+				RAID indicates the partition is used in a Redundant Array of Inexpensive Disks (RAID).		
+
+
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Checking a Partition						
+[O][O][O][O][O][O][O][O][O][O][O][O][O]	
+
+Checking a partition will attempt to find and fix problems in the file system. 
+Checking a partition will attempt to grow the file system to fill the partition.
+
+		Select an unmounted partition. See the section called “Selecting a Partition”.
+		Choose: Partition → Check. The application displays the 
+		check partition operation in the Pending Operations pane
+
+
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Working with the Operation Queue			
+[O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Undoing Last Operation						
+[O][O][O][O][O][O][O][O][O][O][O][O][O]	
+
+To undo the last operation in the operation queue, choose: Edit → Undo Last Operation.
+The application removes the last operation from the queue displayed in the Pending Operations pane.
+If there are no operations remaining in the queue, the application closes the Pending Operations pane.
+
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Clearing All Operations						
+[O][O][O][O][O][O][O][O][O][O][O][O][O]	
+
+
+To clear all operations in the operation queue, choose: Edit → Clear All Operations. 
+The application removes all operations from the queue and closes the Pending Operations pane.
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Applying All operations						
+[O][O][O][O][O][O][O][O][O][O][O][O][O]
+
+To apply all operations:
+		Choose: Edit → Apply All Operations. 
+		The application displays an Apply operations to device dialog.
+		Editing partitions has the potential to cause LOSS of DATA. back up
+
+Click Apply. The application displays an Applying pending operations dialog. 
+The application applies each pending operation in the order you created the operations.
+The application displays a status update when each operation is completed.
+
+		To view more information, click Details. The application displays more details about operations.
+		To view more information about the steps in each operation, click the arrow button beside each step.
+		To stop the operations while they are executing, click Cancel. The application displays a disabled Force Cancel
+		(5) button and counts down for 5 seconds.
+		Cancel instructs the application to stop or roll back operations as necessary to ensure data integrity.
+
+		If operations have not halted after 5 seconds the application enables the Force Cancel button.
+		To force the operations to stop, click Force Cancel. The application displays a warning dialog.
+		Click Continue Operation to allow the roll back operations to complete, or click Cancel Operation to cancel the roll back operations.		
+
+		a force cancel can cause severe data loss
+
+If you want to save the details from applying all operations, then click Save Details. The application displays a Save Details dialog.
+		If you want to change the default file name, then type a file name in the Name text box.
+		If you want to save the file in a folder different than /root, Click Browse for other folders. 		
+		Use the file system navigator to select a folder.
+		Click Save to save the file. The application saves the details file.
+
+		If you use gparted from a Live CD, back it up to a hard disk
+
+Click Close. The application closes the Applying pending operations dialog.
+ The application rescans all the disk devices and refreshes the device partition 
+ layout in the gparted window.
+
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Acquiring GParted on Live CD
+[O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O]
+
+A Live CD is a Compact Disc that contains a bootable operating system. A Live CD enables you to boot your computer from the CD.
+Using gparted from a Live CD has the following advantages:
+
+		You can edit all of your partitions because the partitions are not mounted.
+		You can edit partitions on computers that do not have a bootable operating system.
+
+The gparted application is available on many Live CD distributions.
+
+		to download 
+
+		GParted Live CD https://gparted.org/livecd.php
+		System Rescue CD http://www.system-rescue-cd.org
+
+		The GParted Live CD image can be written to a USB flash drive.
+		If your computer can boot from Universal Serial Bus (USB) then 
+		you might prefer to boot and use gparted from a USB flash drive.	
+
+		To avoid wasting a blank CD when burning a CD image file, 
+		Ensure the checksum of the downloaded file matches the checksum posted on the download page.
+		Be sure to burn the .iso file as an image to the blank CD. 
+		If you burn the .iso file as data to a blank CD then the CD will not boot in your computer.			
+
+
+[O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O]
+			Fixing Operating System Boot Problems	
+[O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O][O]
+
+
+	
+
+
+
